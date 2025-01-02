@@ -10,7 +10,7 @@ clink.default_bindings = windows
 # name: Controls what startup logo to show
 # type: enum
 # options: none,full,short
-clink.logo = short
+clink.logo = none
 
 # name: Pressing Ctrl-D exits session
 # type: boolean
