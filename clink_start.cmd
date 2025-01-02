@@ -5,7 +5,6 @@ set "CURRENT_DIR=%CD%"
 
 rem Check if the current directory is HOME
 if "%CURRENT_DIR%" NEQ "%HOMEDRIVE%%HOMEPATH%" (
-    echo Current directory is not HOME. Terminating.
     exit /b
 )
 
