@@ -79,68 +79,68 @@
 -- fetches in the background.
 
 local default_colors_terminal = {
-    ["execution_time"] = "yellow",
-    ["git_arrow"] = "cyan",
-    ["git_stash"] = "cyan",
-    ["git_branch"] = "sgr 38;5;242",
-    --["git_branch_cached"]   = "red",
-    ["git_action"] = "yellow",
-    ["git_dirty"] = "sgr 38;5;218",
-    ["host_at"] = "sgr 38;5;242",
-    ["host"] = "sgr 38;5;242",
-    ["path"] = "bold blue",
-    ["prompt_error"] = "red",
-    ["prompt_success"] = "magenta",
-    ["user"] = "sgr 38;5;242",
-    ["user_root"] = "default",
-    ["virtualenv"] = "sgr 38;5;242",
+	["execution_time"] = "yellow",
+	["git_arrow"] = "cyan",
+	["git_stash"] = "cyan",
+	["git_branch"] = "sgr 38;5;242",
+	--["git_branch_cached"]   = "red",
+	["git_action"] = "yellow",
+	["git_dirty"] = "sgr 38;5;218",
+	["host_at"] = "sgr 38;5;242",
+	["host"] = "sgr 38;5;242",
+	["path"] = "bold blue",
+	["prompt_error"] = "red",
+	["prompt_success"] = "magenta",
+	["user"] = "sgr 38;5;242",
+	["user_root"] = "default",
+	["virtualenv"] = "sgr 38;5;242",
 }
 
 local default_colors_custom = {
-    ["execution_time"] = "#A3BE8C",
-    ["git_arrow"] = "#88C0D0",
-    ["git_stash"] = "#6C6C6C",
-    ["git_branch"] = "#6C6C6C",
-    --["git_branch_cached"]   = "red",
-    ["git_action"] = "#B48E61", --"yellow",
-    ["git_dirty"] = "sgr 38;5;218",
-    ["host_at"] = "#6C6C6C",
-    ["host"] = "#BF616A",
-    ["path"] = "#81A1C1",
-    ["prompt_error"] = "#BF616A",
-    ["prompt_success"] = "#B48EAD",
-    ["user"] = "#BF616A",
-    ["user_root"] = "default",
-    ["virtualenv"] = "#6C6C6C",
+	["execution_time"] = "#A3BE8C",
+	["git_arrow"] = "#88C0D0",
+	["git_stash"] = "#6C6C6C",
+	["git_branch"] = "#6C6C6C",
+	--["git_branch_cached"]   = "red",
+	["git_action"] = "#B48E61", --"yellow",
+	["git_dirty"] = "sgr 38;5;218",
+	["host_at"] = "#6C6C6C",
+	["host"] = "#BF616A",
+	["path"] = "#81A1C1",
+	["prompt_error"] = "#BF616A",
+	["prompt_success"] = "#B48EAD",
+	["user"] = "#BF616A",
+	["user_root"] = "default",
+	["virtualenv"] = "#6C6C6C",
 }
 
 local term_emoji = (clink.getansihost() == "winterminal") and true or nil
 local default_symbols = {
-    ["PURE_PROMPT_SYMBOL"] = term_emoji and "❯" or ">",
-    ["PURE_GIT_DIRTY"] = "*",
-    ["PURE_GIT_DOWN_ARROW"] = term_emoji and "⇣" or "↓",
-    ["PURE_GIT_UP_ARROW"] = term_emoji and "⇡" or "↑",
-    ["PURE_GIT_STASH_SYMBOL"] = "≡",
+	["PURE_PROMPT_SYMBOL"] = term_emoji and "❯" or ">",
+	["PURE_GIT_DIRTY"] = "*",
+	["PURE_GIT_DOWN_ARROW"] = term_emoji and "⇣" or "↓",
+	["PURE_GIT_UP_ARROW"] = term_emoji and "⇡" or "↑",
+	["PURE_GIT_STASH_SYMBOL"] = "≡",
 }
 
 local colors = {}
 local symbols = {}
 
 local function sgr(code)
-    return "\x1b[" .. (code or "") .. "m"
+	return "\x1b[" .. (code or "") .. "m"
 end
 
 local need_update = true
 local function update_config()
-    local default_colors = os.getenv("PURE_USE_TERMINAL_COLORS") and default_colors_terminal or default_colors_custom
-    for k, v in pairs(default_colors) do
-        local c = os.getenv("pure_color_" .. k) or v
-        colors[k] = sgr((settings.parsecolor(c) or ""):gsub("^0;", ""))
-    end
-    for k, v in pairs(default_symbols) do
-        symbols[k] = os.getenv(k) or v
-    end
-    need_update = nil
+	local default_colors = os.getenv("PURE_USE_TERMINAL_COLORS") and default_colors_terminal or default_colors_custom
+	for k, v in pairs(default_colors) do
+		local c = os.getenv("pure_color_" .. k) or v
+		colors[k] = sgr((settings.parsecolor(c) or ""):gsub("^0;", ""))
+	end
+	for k, v in pairs(default_symbols) do
+		symbols[k] = os.getenv(k) or v
+	end
+	need_update = nil
 end
 
 local last_duration
@@ -148,154 +148,156 @@ local last_exitcode
 local last_gitstatus
 
 local function execution_time_func()
-    if last_duration then
-        local max = tonumber(os.getenv("PURE_CMD_MAX_EXEC_TIME") or "5")
-        if last_duration >= max then
-            local d, h, m, s
-            local duration = last_duration
-            local tenths = duration < 30
-            local t = math.floor(duration * 10) % 10
-            duration = math.floor(duration)
-            s = (duration % 60)
-            duration = math.floor(duration / 60)
-            if duration > 0 then
-                m = (duration % 60)
-                duration = math.floor(duration / 60)
-                if duration > 0 then
-                    h = (duration % 24)
-                    duration = math.floor(duration / 24)
-                    if duration > 0 then
-                        d = duration
-                    end
-                end
-            end
+	if last_duration then
+		local max = tonumber(os.getenv("PURE_CMD_MAX_EXEC_TIME") or "5")
+		if last_duration >= max then
+			local d, h, m, s
+			local duration = last_duration
+			local tenths = duration < 30
+			local t = math.floor(duration * 10) % 10
+			duration = math.floor(duration)
+			s = (duration % 60)
+			duration = math.floor(duration / 60)
+			if duration > 0 then
+				m = (duration % 60)
+				duration = math.floor(duration / 60)
+				if duration > 0 then
+					h = (duration % 24)
+					duration = math.floor(duration / 24)
+					if duration > 0 then
+						d = duration
+					end
+				end
+			end
 
-            t = tenths and "." .. t or ""
+			t = tenths and "." .. t or ""
 
-            local text = ""
-            if (t ~= "") or (s and (s > 0)) then
-                text = tostring(s or "0") .. t
-                if text == "0.0" then
-                    text = ""
-                else
-                    text = text .. "s "
-                end
-            end
-            if m and (m > 0) then
-                text = tostring(m) .. "m " .. text
-            end
-            if h and (h > 0) then
-                text = tostring(h) .. "h " .. text
-            end
-            if d and (d > 0) then
-                text = tostring(d) .. "d " .. text
-            end
-            return text:gsub("%s+$", "")
-        end
-    end
+			local text = ""
+			if (t ~= "") or (s and (s > 0)) then
+				text = tostring(s or "0") .. t
+				if text == "0.0" then
+					text = ""
+				else
+					text = text .. "s "
+				end
+			end
+			if m and (m > 0) then
+				text = tostring(m) .. "m " .. text
+			end
+			if h and (h > 0) then
+				text = tostring(h) .. "h " .. text
+			end
+			if d and (d > 0) then
+				text = tostring(d) .. "d " .. text
+			end
+			return text:gsub("%s+$", "")
+		end
+	end
 end
 
 local function getstatus()
-    local status = git.getstatus()
-    if status then
-        status.hasstash = git.hasstash()
-        status.action = git.getaction()
-    end
-    return status
+	local status = git.getstatus()
+	if status then
+		status.hasstash = git.hasstash()
+		status.action = git.getaction()
+	end
+	return status
 end
 
 local function git_func()
-    if not git.getgitdir() then
-        return
-    end
+	if not git.getgitdir() then
+		return
+	end
 
-    local status = clink.promptcoroutine(getstatus)
-    if status then
-        last_gitstatus = status
-    else
-        status = last_gitstatus or { branch = git.getbranch() }
-    end
+	local status = clink.promptcoroutine(getstatus)
+	if status then
+		last_gitstatus = status
+	else
+		status = last_gitstatus or { branch = git.getbranch() }
+	end
 
-    local text = colors.git_branch .. status.branch .. sgr()
+	local text = colors.git_branch .. status.branch .. sgr()
 
-    if status.dirty then
-        text = text .. colors.git_dirty .. symbols.PURE_GIT_DIRTY .. sgr()
-    end
+	if status.dirty then
+		text = text .. colors.git_dirty .. symbols.PURE_GIT_DIRTY .. sgr()
+	end
 
-    if status.action then
-        text = text .. " " .. colors.git_action .. status.action .. sgr()
-    end
+	if status.action then
+		text = text .. " " .. colors.git_action .. status.action .. sgr()
+	end
 
-    local arrows = ""
-    if tonumber(status.behind or 0) > 0 then
-        arrows = arrows .. symbols.PURE_GIT_DOWN_ARROW
-    end
-    if status.unpublished or tonumber(status.ahead or 0) > 0 then
-        arrows = arrows .. symbols.PURE_GIT_UP_ARROW
-    end
-    if arrows ~= "" then
-        arrows = " " .. colors.git_arrow .. arrows .. sgr()
-    end
+	local arrows = ""
+	if tonumber(status.behind or 0) > 0 then
+		arrows = arrows .. symbols.PURE_GIT_DOWN_ARROW
+	end
+	if status.unpublished or tonumber(status.ahead or 0) > 0 then
+		arrows = arrows .. symbols.PURE_GIT_UP_ARROW
+	end
+	if arrows ~= "" then
+		arrows = " " .. colors.git_arrow .. arrows .. sgr()
+	end
 
-    local stash = ""
-    if status.hasstash then
-        stash = " " .. colors.git_stash .. symbols.PURE_GIT_STASH_SYMBOL .. sgr()
-    end
+	local stash = ""
+	if status.hasstash then
+		stash = " " .. colors.git_stash .. symbols.PURE_GIT_STASH_SYMBOL .. sgr()
+	end
 
-    return text .. arrows .. stash
+	return text .. arrows .. stash
 end
 
 local function host_func()
-    return os.getenv("COMPUTERNAME")
+	return os.getenv("COMPUTERNAME")
 end
 
 local function path_func()
-    return rl.collapsetilde(os.getcwd())
+	return rl.collapsetilde(os.getcwd())
 end
 
 local function prompt_func()
-    local color
-    if last_exitcode and last_exitcode ~= 0 then
-        color = colors.prompt_error
-    else
-        color = colors.prompt_success
-    end
-    return color .. symbols.PURE_PROMPT_SYMBOL .. " "
+	local color
+	if last_exitcode and last_exitcode ~= 0 then
+		color = colors.prompt_error
+	else
+		color = colors.prompt_success
+	end
+	return color .. symbols.PURE_PROMPT_SYMBOL .. " "
 end
 
 local function user_func()
-    local text = os.getenv("USERNAME")
-    if os.isuseradmin() then
-        return colors.user_root .. (text or "ADMIN")
-    elseif text then
-        return colors.user .. text
-    end
+	local text = os.getenv("USERNAME")
+	if os.isuseradmin() then
+		return colors.user_root .. (text or "ADMIN")
+	elseif text then
+		return colors.user .. text
+	end
 end
 
 local function virtualenv_func()
-    local text
-    -- Check if showing virtual environment in the prompt is disabled.
-    if os.getenv("VIRTUAL_ENV_DISABLE_PROMPT") then
-        return
-    end
-    -- Check if a Conda environment is active and display its name.
-    local conda = os.getenv("CONDA_DEFAULT_ENV")
-    if conda then
-        text = conda
-    end
-    -- Check VIRTUAL_ENV and display it.
-    local venv = os.getenv("VIRTUAL_ENV")
-    if venv then
-        text = venv
-    end
-    -- Check VIRTUAL_ENV_PROMPT and display it.
-    local venvp = os.getenv("VIRTUAL_ENV_PROMPT")
-    if venvp then
-        text = venvp
-    end
-    if text then
-        return text:gsub("\t\r\n", ""):gsub("^%s+", ""):gsub("%s+$", "")
-    end
+	local text
+	-- Check if showing virtual environment in the prompt is disabled.
+	if os.getenv("VIRTUAL_ENV_DISABLE_PROMPT") then
+		return
+	end
+	-- Check if a Conda environment is active and display its name.
+	local conda = os.getenv("CONDA_DEFAULT_ENV")
+	if conda then
+		text = conda
+	end
+	-- Check VIRTUAL_ENV and display the venv name.
+	local venv = os.getenv("VIRTUAL_ENV")
+	if venv then
+		-- Extract the last part of the path using string.match
+		local venv_name = venv:match("([^/\\]+)$")
+		text = venv_name
+	end
+	-- Check VIRTUAL_ENV_PROMPT and display it.
+	local venvp = os.getenv("VIRTUAL_ENV_PROMPT")
+	if venvp then
+		text = venvp
+	end
+	if text then
+		return text:gsub("\t\r\n", ""):gsub("^%s+", ""):gsub("%s+$", "")
+	end
 end
 
 -- If you want to add more modules, this is where to add them.
@@ -304,93 +306,93 @@ end
 -- FILE.  BECAUSE ANY CHANGES TO THE ORIGINAL FILE WILL BE LOST EACH TIME A
 -- CLINK UPDATE IS INSTALLED.
 local modules = {
-    -- Module Name            Module Function
-    ["execution_time"] = execution_time_func,
-    ["git"] = git_func,
-    ["host"] = host_func,
-    ["path"] = path_func,
-    ["prompt"] = prompt_func,
-    ["user"] = user_func,
-    ["virtualenv"] = virtualenv_func,
+	-- Module Name            Module Function
+	["execution_time"] = execution_time_func,
+	["git"] = git_func,
+	["host"] = host_func,
+	["path"] = path_func,
+	["prompt"] = prompt_func,
+	["user"] = user_func,
+	["virtualenv"] = virtualenv_func,
 }
 
 local function format_modules(list)
-    if need_update then
-        -- onbeginedit doesn't happen during `clink config prompt show pure`,
-        -- so make sure update_config() gets called if it hasn't been yet.
-        update_config()
-    end
+	if need_update then
+		-- onbeginedit doesn't happen during `clink config prompt show pure`,
+		-- so make sure update_config() gets called if it hasn't been yet.
+		update_config()
+	end
 
-    local t = {}
-    local prev
-    for _, m in ipairs(string.explode(list)) do
-        local func = modules[m]
-        if func then
-            local color = colors[m] or ""
-            local text = func()
-            if text then
-                local sep = " "
-                if m == "host" and prev == "user" then
-                    sep = colors.host_at .. "@"
-                end
-                table.insert(t, sep .. color .. text)
-            end
-        end
-        prev = m
-    end
-    return table.concat(t):gsub("^%s+", "")
+	local t = {}
+	local prev
+	for _, m in ipairs(string.explode(list)) do
+		local func = modules[m]
+		if func then
+			local color = colors[m] or ""
+			local text = func()
+			if text then
+				local sep = " "
+				if m == "host" and prev == "user" then
+					sep = colors.host_at .. "@"
+				end
+				table.insert(t, sep .. color .. text)
+			end
+		end
+		prev = m
+	end
+	return table.concat(t):gsub("^%s+", "")
 end
 
 local pureprompt = clink.promptfilter(5)
 
 function pureprompt:filter() -- luacheck: no unused
-    local line1_modules = os.getenv("PURE_LINE1_MODULES") or "host path git execution_time"
-    local line2_modules = os.getenv("PURE_LINE2_MODULES") or "virtualenv"
-    local line1 = format_modules(line1_modules)
-    local line2 = format_modules(line2_modules .. " prompt")
-    -- set cwd to environment variable
-    os.execute("setx PURE_CWD \"" .. os.getcwd() .. "\" > nul")
-    return line1 .. "\n" .. line2
+	local line1_modules = os.getenv("PURE_LINE1_MODULES") or "host path git execution_time"
+	local line2_modules = os.getenv("PURE_LINE2_MODULES") or "virtualenv"
+	local line1 = format_modules(line1_modules)
+	local line2 = format_modules(line2_modules .. " prompt")
+	-- set cwd to environment variable
+	os.execute('setx PURE_CWD "' .. os.getcwd() .. '" > nul')
+	return line1 .. "\n" .. line2
 end
 
 function pureprompt:transientfilter() -- luacheck: no unused
-    return format_modules("prompt")
+	return format_modules("prompt")
 end
 
 local begin_duration
 
 clink.onendedit(function(line)
-    if line:gsub("%s+$", "") == "" then
-        -- Don't measure empty commands.
-        begin_duration = nil
-    else
-        -- Begin a duration measurement.
-        begin_duration = os.clock()
-    end
-    last_duration = nil
-    last_exitcode = nil
+	if line:gsub("%s+$", "") == "" then
+		-- Don't measure empty commands.
+		begin_duration = nil
+	else
+		-- Begin a duration measurement.
+		begin_duration = os.clock()
+	end
+	last_duration = nil
+	last_exitcode = nil
 end)
 
 local last_cwd
 local last_gitdir
 clink.onbeginedit(function()
-    -- Discard cached git status if the cwd or repo changes.
-    local cwd = os.getcwd()
-    if last_cwd ~= cwd then
-        last_cwd = cwd
-        local gitdir = git.getgitdir()
-        if last_gitdir ~= gitdir then
-            last_gitdir = gitdir
-            last_gitstatus = nil
-        end
-    end
-    -- End a duration measurement.
-    if begin_duration then
-        last_duration = os.clock() - begin_duration
-        begin_duration = nil
-    end
-    -- Remember the exit code.
-    last_exitcode = os.geterrorlevel()
-    -- Update config options.
-    update_config()
+	-- Discard cached git status if the cwd or repo changes.
+	local cwd = os.getcwd()
+	if last_cwd ~= cwd then
+		last_cwd = cwd
+		local gitdir = git.getgitdir()
+		if last_gitdir ~= gitdir then
+			last_gitdir = gitdir
+			last_gitstatus = nil
+		end
+	end
+	-- End a duration measurement.
+	if begin_duration then
+		last_duration = os.clock() - begin_duration
+		begin_duration = nil
+	end
+	-- Remember the exit code.
+	last_exitcode = os.geterrorlevel()
+	-- Update config options.
+	update_config()
 end)
