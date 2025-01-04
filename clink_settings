@@ -1,7 +1,3 @@
-# name: A .clinkprompt file to use for the prompt
-# type: string
-clink.customprompt = C:\Users\njytwf\AppData\Local\clink\themes\puremod.clinkprompt
-
 # name: Selects default key bindings
 # type: enum
 # options: bash,windows
