@@ -125,6 +125,10 @@ match.expand_envvars = True
 # type: boolean
 match.substring = True
 
+# name: Changes the prefix of the aliases
+# type: string
+zoxide.cmd = cd
+
 
 
 # name: The oh-my-posh theme to use.
