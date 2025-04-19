@@ -9,10 +9,13 @@ if "%CURRENT_DIR%" NEQ "%HOMEDRIVE%%HOMEPATH%" (
 )
 
 rem Check if PURE_CWD environment variable is set
-if defined PURE_CWD (
-    rem Change to the directory specified in PURE_CWD
-    cd /d "%PURE_CWD%"
-    echo Changed to directory: %PURE_CWD%
-) else (
-    echo PURE_CWD is not set. Staying in the current directory.
+set "LAST_DIR_FILE=%LOCALAPPDATA%\clink\_last_dir.txt"
+
+if exist "%LAST_DIR_FILE%" (
+    echo Reading last directory from %LAST_DIR_FILE%
+
+    for /f "delims=" %%i in ('type "%LAST_DIR_FILE%"') do (
+        echo Changing directory to %%i
+        cd /d "%%i"
+    )
 )

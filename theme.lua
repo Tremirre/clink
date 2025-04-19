@@ -352,8 +352,14 @@ function pureprompt:filter() -- luacheck: no unused
 	local line2_modules = os.getenv("PURE_LINE2_MODULES") or "virtualenv"
 	local line1 = format_modules(line1_modules)
 	local line2 = format_modules(line2_modules .. " prompt")
-	-- set cwd to environment variable
-	os.execute('setx PURE_CWD "' .. os.getcwd() .. '" > nul')
+	-- set cwd to file
+	local file = io.open(os.getenv("LOCALAPPDATA") .. "\\clink\\_last_dir.txt", "w")
+	if file then
+		file:write(os.getcwd())
+		file:close()
+	else
+		print("Error: Unable to open file for writing.")
+	end
 	return line1 .. "\n" .. line2
 end
 
